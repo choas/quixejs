@@ -1,4 +1,5 @@
 const STORY = 'src/quixe/stories/glulxercise.ulx';
+const VERBOSE = 1;
 
 // START_FAKE_BROWSER
 // fake a browser with a global window, document, location, ...
@@ -31,25 +32,36 @@ global.navigator.userAgent = "Node.js";
 // START_GLKOTE
 // adding GlkOte stuff (note: glkote.js is too much 'browser')
 global.GlkOte = {};
-global.GlkOte.log = function (l) { console.log(l); }
-
+global.GlkOte.log = function (args) { 
+    if (VERBOSE >= 1) console.log(args); 
+}
 // END_GLKOTE
 
 // START_FAKE_JQUERY
 // maybe the jquery package would be useful?
 global.jQuery = {};
 global.jQuery.ajax = function (url, opt) {
+  if (VERBOSE >= 2) console.log('jQuery.ajax', url, opt);
+  var fs = require('fs');
+  var story = fs.readFileSync(url, 'binary');
+  opt.success(story);
 };
 // END_FAKE_JQUERY
-
 
 // IMPORT
 // import required js files (see play-remote.html)
 // don't add the once which needs too much 'browser'
+// make some of them global (gi_load needs them)
 
 require('./src/quixe/src/quixe/quixe.js');
+global.window.Quixe = global.Quixe;
+
 require('./src/quixe/src/glkote/glkapi.js');
+global.window.Glk = global.Glk;
+
 require('./src/quixe/src/quixe/gi_dispa.js');
+global.window.GiDispa = global.GiDispa;
+
 require('./src/quixe/src/quixe/gi_load.js');
 
 
