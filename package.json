@@ -1,0 +1,23 @@
+{
+  "name": "quixe",
+  "version": "0.1.1",
+  "description": "quixe (without browser)",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/choas/quixejs.git"
+  },
+  "keywords": [
+    "quixe",
+    "npm"
+  ],
+  "author": "Lars Gregori",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/choas/quixejs/issues"
+  },
+  "homepage": "https://github.com/choas/quixejs#readme"
+}

@@ -8,10 +8,11 @@ var IFACE = null;
 global.window = {};
 
 global.window.document = {};
-global.window.document.createElement = function (item) { 
+global.window.document.createElement = function (item) {
     var elem = {};
-    elem.firstChild = {}; 
-    return elem; }
+    elem.firstChild = {};
+    return elem;
+}
 global.window.console = console;
 
 global.document = {};
@@ -31,8 +32,6 @@ global.XMLHttpRequest = XMLHttpRequest;
 
 global.navigator = {};
 global.navigator.userAgent = "Node.js";
-
-// more ... ???
 
 // END_FAKE_BROWSER
 
@@ -83,6 +82,33 @@ global.GlkOte.update = function (arg) {
 
 // START_FAKE_JQUERY
 // maybe the jquery package would be useful?
+global.$ = function (i) {
+    var e = {};
+    e.length = 1;
+    e.append = function (item) { };
+    var html = function (d) {
+        e.data = d;
+
+        var parser = require('xml2json');
+        e.jsonData = JSON.parse(parser.toJson(d));
+        return e;
+    }
+    e.find = function (what) {
+        // FIXME
+        e.found = e.jsonData['ifindex']['story']['bibliographic']
+        return e;
+    }
+    e.children = function () {
+        var r = [];
+        for (t in e.found) {
+            r.push({ tagName: t, textContent: e.found[t] });
+        }
+        return r;
+    }
+    e.html = html;
+    return e;
+};
+
 global.jQuery = {};
 global.jQuery.ajax = function (url, opt) {
     if (VERBOSE >= 2) console.log('jQuery.ajax', url, opt);
