@@ -8,11 +8,14 @@ var IFACE = null;
 global.window = {};
 
 global.window.document = {};
-global.window.document.createElement = function (i) { var e = {}; e.firstChild = {}; return e; }
+global.window.document.createElement = function (item) { 
+    var elem = {};
+    elem.firstChild = {}; 
+    return elem; }
 global.window.console = console;
 
 global.document = {};
-global.document.createElement = function (i) { var e = {}; e.firstChild = {}; return e; }
+global.document.createElement = global.window.document.createElement;
 
 global.location = {
     search: '?story=' + STORY,
@@ -47,7 +50,34 @@ global.GlkOte.error = function (err) {
     console.log('GlkOte error:', err);
 }
 global.GlkOte.update = function (arg) {
-    console.log('GlkOte update:', arg);
+    if (VERBOSE >= 2) console.log('GlkOte update:', arg);
+
+    gen_count = arg.gen;
+
+    // find content
+    for (var c of arg.content) {
+        var text = c.text;
+        if (text) {
+            for (var i = 0; i < text.length; i++) {
+                var t = text[i];
+                if (t && t.content && t.content.length > 0) {
+                    console.log("TYPE", t.content[0]);
+                    for (var c = 1; c < t.content.length; c++) {
+                        console.log("  ", t.content[c]);
+                    }
+                }
+            }
+        }
+    }
+
+    // updating window
+    if (arg && arg.windows) {
+        for (var w of arg.windows) {
+            if (w.type === 'buffer') {
+                window_id = w.id;
+            }
+        }
+    }
 }
 // END_GLKOTE
 
@@ -80,5 +110,4 @@ require('./src/quixe/src/quixe/gi_load.js');
 
 
 // RUN
-
 GiLoad.load_run();
