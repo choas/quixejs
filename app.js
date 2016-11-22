@@ -1,7 +1,8 @@
-const STORY = 'src/quixe/stories/glulxercise.ulx';
 const VERBOSE = 1;
 
 var IFACE = null;
+
+var Quixe = function(storyfile) {
 
 // START_FAKE_BROWSER
 // fake a browser with a global window, document, location, ...
@@ -19,7 +20,7 @@ global.document = {};
 global.document.createElement = global.window.document.createElement;
 
 global.location = {
-    search: '?story=' + STORY,
+    search: '?story=' + storyfile,
     toString: function () {
         return 'http://localhost/play-all.html?story=' + this.search;
     }
@@ -137,3 +138,6 @@ require('./src/quixe/src/quixe/gi_load.js');
 
 // RUN
 GiLoad.load_run();
+}
+
+module.exports = Quixe;
