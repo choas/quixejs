@@ -28,6 +28,20 @@ global.navigator.userAgent = "Node.js";
 
 // END_FAKE_BROWSER
 
+// START_GLKOTE
+// adding GlkOte stuff (note: glkote.js is too much 'browser')
+global.GlkOte = {};
+global.GlkOte.log = function (l) { console.log(l); }
+
+// END_GLKOTE
+
+// START_FAKE_JQUERY
+// maybe the jquery package would be useful?
+global.jQuery = {};
+global.jQuery.ajax = function (url, opt) {
+};
+// END_FAKE_JQUERY
+
 
 // IMPORT
 // import required js files (see play-remote.html)
