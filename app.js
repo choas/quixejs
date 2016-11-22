@@ -1,8 +1,8 @@
-const VERBOSE = 1;
+const VERBOSE = 0;
 
 var IFACE = null;
 
-var Quixe = function(storyfile) {
+var Quixe = function(storyfile, output) {
 
 // START_FAKE_BROWSER
 // fake a browser with a global window, document, location, ...
@@ -61,7 +61,7 @@ global.GlkOte.update = function (arg) {
             for (var i = 0; i < text.length; i++) {
                 var t = text[i];
                 if (t && t.content && t.content.length > 0) {
-                    console.log("TYPE", t.content[0]);
+                    if (VERBOSE >= 1) console.log("TYPE", t.content[0]);
                     for (var c = 1; c < t.content.length; c++) {
                         console.log("  ", t.content[c]);
                     }
