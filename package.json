@@ -1,6 +1,6 @@
 {
   "name": "quixe",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "description": "quixe (without browser)",
   "main": "app.js",
   "scripts": {
@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/choas/quixejs/issues"
   },
-  "homepage": "https://github.com/choas/quixejs#readme"
+  "homepage": "https://github.com/choas/quixejs#readme",
+  "dependencies": {
+    "xml2json": "^0.10.0"
+  }
 }
