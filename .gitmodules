@@ -1,0 +1,3 @@
+[submodule "src/quixe"]
+	path = src/quixe
+	url = https://github.com/erkyrath/quixe
