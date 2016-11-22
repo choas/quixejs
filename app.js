@@ -6,9 +6,11 @@ const VERBOSE = 1;
 global.window = {};
 
 global.window.document = {};
+global.window.document.createElement = function (i) { var e = {}; e.firstChild = {}; return e; }
 global.window.console = console;
 
 global.document = {};
+global.document.createElement = function (i) { var e = {}; e.firstChild = {}; return e; }
 
 global.location = { 
   search: '?story=' + STORY, 
@@ -35,6 +37,7 @@ global.GlkOte = {};
 global.GlkOte.log = function (args) { 
     if (VERBOSE >= 1) console.log(args); 
 }
+global.GlkOte.init = function (iface) {}
 // END_GLKOTE
 
 // START_FAKE_JQUERY
