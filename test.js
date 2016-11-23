@@ -1,4 +1,7 @@
 var Q = require('./app.js');
-
-Q('src/quixe/stories/glulxercise.ulx');
-
+var q = new Q();
+q.init('src/quixe/stories/glulxercise.ulx',
+  function (text) {
+    console.log('content text', text);
+  });
+q.input('random');

@@ -2,8 +2,6 @@ const VERBOSE = 0;
 
 var IFACE = null;
 
-var Quixe = function(storyfile, output) {
-
 // START_FAKE_BROWSER
 // fake a browser with a global window, document, location, ...
 global.window = {};
@@ -18,13 +16,6 @@ global.window.console = console;
 
 global.document = {};
 global.document.createElement = global.window.document.createElement;
-
-global.location = {
-    search: '?story=' + storyfile,
-    toString: function () {
-        return 'http://localhost/play-all.html?story=' + this.search;
-    }
-}
 
 function XMLHttpRequest() {
     this.overrideMimeType = true;
@@ -67,6 +58,11 @@ global.GlkOte.update = function (arg) {
                     }
                 }
             }
+            if (output_callback !== undefined) {
+                output_callback(text);
+            } else {
+                if (VERBOSE >= 2) console.log('output callback not defined');
+            }
         }
     }
 
@@ -78,6 +74,7 @@ global.GlkOte.update = function (arg) {
             }
         }
     }
+
 }
 // END_GLKOTE
 
@@ -137,7 +134,24 @@ require('./src/quixe/src/quixe/gi_load.js');
 
 
 // RUN
-GiLoad.load_run();
+var output_callback;
+
+var Quixe = function () {
+
+    this.init = function (storyfile, callback) {
+        output_callback = callback;
+        global.location = {
+            search: '?story=' + storyfile,
+            toString: function () {
+                return 'http://localhost/play-all.html?story=' + this.search;
+            }
+        }
+        GiLoad.load_run();
+    }
+
+    this.input = function (value) {
+        IFACE.accept({"type":"line", "gen":gen_count, "window":window_id, "value":value});
+    };
 }
 
 module.exports = Quixe;
