@@ -58,10 +58,12 @@ global.GlkOte.update = function (arg) {
                     }
                 }
             }
-            if (output_callback !== undefined) {
+            if (input_callback !== undefined) {
+                input_callback(text);
+            } else if (output_callback !== undefined) {
                 output_callback(text);
             } else {
-                if (VERBOSE >= 2) console.log('output callback not defined');
+                if (VERBOSE >= 2) console.log('input and output callback not defined');
             }
         }
     }
@@ -134,7 +136,7 @@ require('./src/quixe/src/quixe/gi_load.js');
 
 
 // RUN
-var output_callback;
+var output_callback, input_callback;
 
 var Quixe = function () {
 
@@ -149,7 +151,8 @@ var Quixe = function () {
         GiLoad.load_run();
     }
 
-    this.input = function (value) {
+    this.input = function (value, callback) {
+        input_callback = callback;
         IFACE.accept({"type":"line", "gen":gen_count, "window":window_id, "value":value});
     };
 }
