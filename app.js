@@ -1,4 +1,4 @@
-const VERBOSE = 0;
+var VERBOSE = 0;
 
 var IFACE = null;
 
@@ -113,7 +113,11 @@ global.jQuery = {};
 global.jQuery.ajax = function (url, opt) {
     if (VERBOSE >= 2) console.log('jQuery.ajax', url, opt);
     var fs = require('fs');
-    var story = fs.readFileSync(url, 'binary');
+    try {
+        var story = fs.readFileSync(url, 'binary');
+    } catch (e) {
+        console.error(e);
+    }
     opt.success(story);
 };
 // END_FAKE_JQUERY
@@ -138,7 +142,11 @@ require('./src/quixe/src/quixe/gi_load.js');
 // RUN
 var output_callback, input_callback;
 
-var Quixe = function () {
+var Quixe = function (verbose) {
+
+    if (verbose) {
+        VERBOSE = verbose;
+    }
 
     this.init = function (storyfile, callback) {
         output_callback = callback;
