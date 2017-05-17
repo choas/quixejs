@@ -2,6 +2,9 @@ var VERBOSE = 0;
 
 var IFACE = null;
 
+const fs = require('fs'),
+      requireUncached = require('require-uncached');
+
 // START_FAKE_BROWSER
 // fake a browser with a global window, document, location, ...
 global.window = {};
@@ -25,6 +28,42 @@ global.XMLHttpRequest = XMLHttpRequest;
 global.navigator = {};
 global.navigator.userAgent = "Node.js";
 
+// fake browser localStorage and store key-value in a file
+// possible keys: content, dirent, autosave
+global.window.localStorage = {
+    getItem: function (key) {
+
+        try {
+            if (VERBOSE >= 2) console.log('read file', key);
+            var fileData = fs.readFileSync(key, "utf8");
+            if (VERBOSE >= 1) console.log('key', key, '=>', fileData);
+            return fileData;
+        } catch (e) {
+            if (VERBOSE >= 1) console.log('file not found:', key);
+        }
+        return null;
+    },
+    setItem: function (key, val) {
+        if (VERBOSE >= 2) console.log('store file', key, ':', val);
+        fs.writeFileSync(key, val, { "encoding": 'utf8' });
+    },
+    removeItem: function (key) {
+        if (VERBOSE >= 2) console.log('delete file', key);
+        fs.unlink(key, function (err) {
+            if (err) {
+                if (VERBOSE >= 2) console.log('file', key, 'NOT deleted');
+            } else {
+                if (VERBOSE >= 2) console.log('file', key, 'deleted');
+            }
+        });
+    },
+    key: function (index) {
+        throw "'localStorage key' not implemented";
+    },
+    clear: function () {
+        throw "'localStorage clear' not implemented";
+    }
+}
 // END_FAKE_BROWSER
 
 // START_GLKOTE
@@ -37,8 +76,11 @@ global.GlkOte.init = function (iface) {
     IFACE = iface;
     iface.accept({ "type": "init", "gen": 0, "metrics": { "width": 450, "height": 723, "gridcharheight": 16, "gridcharwidth": 8.375, "gridmarginx": 20, "gridmarginy": 12, "buffercharheight": 16, "buffercharwidth": 7, "buffermarginx": 20, "buffermarginy": 12, "graphicsmarginx": 0, "graphicsmarginy": 0, "outspacingx": 4, "outspacingy": 4, "inspacingx": 4, "inspacingy": 4 } });
 }
+global.GlkOte.warning = function (err) {
+    if (VERBOSE >= 1) console.log('GlkOte warning:', err);
+}
 global.GlkOte.error = function (err) {
-    console.log('GlkOte error:', err);
+    if (VERBOSE >= 1) console.log('GlkOte error:', err);
 }
 global.GlkOte.update = function (arg) {
     if (VERBOSE >= 2) console.log('GlkOte update:', arg);
@@ -106,13 +148,17 @@ global.$ = function (i) {
         return r;
     }
     e.html = html;
+    e.on = function (w, c) {
+        // FIXME
+        if (VERBOSE >= 2) console.log('ON', w, '...'); 
+    }
+
     return e;
 };
 
 global.jQuery = {};
 global.jQuery.ajax = function (url, opt) {
     if (VERBOSE >= 2) console.log('jQuery.ajax', url, opt);
-    var fs = require('fs');
     try {
         var story = fs.readFileSync(url, 'binary');
     } catch (e) {
@@ -124,19 +170,21 @@ global.jQuery.ajax = function (url, opt) {
 
 // IMPORT
 // import required js files (see play-remote.html)
-// don't add the once which needs too much 'browser'
+// don't add the once which needs too much "browser"
 // make some of them global (gi_load needs them)
 
-require('./src/quixe/src/quixe/quixe.js');
+requireUncached('./src/quixe/src/quixe/quixe.js');
 global.window.Quixe = global.Quixe;
 
-require('./src/quixe/src/glkote/glkapi.js');
+requireUncached('./src/quixe/src/glkote/glkapi.js');
 global.window.Glk = global.Glk;
 
-require('./src/quixe/src/quixe/gi_dispa.js');
+requireUncached('./src/quixe/src/quixe/gi_dispa.js');
 global.window.GiDispa = global.GiDispa;
 
-require('./src/quixe/src/quixe/gi_load.js');
+requireUncached('./src/quixe/src/quixe/gi_load.js');
+
+requireUncached('./src/quixe/src/glkote/dialog.js');
 
 
 // RUN
@@ -161,7 +209,7 @@ var Quixe = function (verbose) {
 
     this.input = function (value, callback) {
         input_callback = callback;
-        IFACE.accept({"type":"line", "gen":gen_count, "window":window_id, "value":value});
+        IFACE.accept({ "type": "line", "gen": gen_count, "window": window_id, "value": value });
     };
 }
 
