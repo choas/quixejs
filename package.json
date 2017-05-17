@@ -1,6 +1,6 @@
 {
   "name": "quixe",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "quixe (without browser)",
   "main": "app.js",
   "scripts": {
