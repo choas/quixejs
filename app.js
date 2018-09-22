@@ -131,8 +131,8 @@ global.$ = function (i) {
     var html = function (d) {
         e.data = d;
 
-        var parser = require('xml2json');
-        e.jsonData = JSON.parse(parser.toJson(d));
+        var xmljs = require("xml-js");
+        e.jsonData = xmljs.xml2json(d, {compact: true, spaces: 4});
         return e;
     }
     e.find = function (what) {

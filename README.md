@@ -6,3 +6,8 @@ Quixe.js is based on [Quixe -- a Glulx VM interpreter written in Javascript](htt
 Quixe.js runs without a browser and can therefore run on Node.js as backend system.
 
     npm install quixe --save
+
+
+## clone
+
+    git clone --recursive git@github.com:choas/quixejs.git
