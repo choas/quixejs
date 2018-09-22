@@ -9,6 +9,6 @@ Quixe.js runs without a browser and can therefore run on Node.js as backend syst
 
     npm install quixe --save
 
+## clone
 
-## License
-[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fchoas%2Fquixejs.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fchoas%2Fquixejs?ref=badge_large)
+    git clone --recursive git@github.com:choas/quixejs.git
